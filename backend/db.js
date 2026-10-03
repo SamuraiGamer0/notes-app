@@ -1,16 +1,10 @@
 // db.js
-// Conexión a SQLite y creación del esquema si no existe.
-// better-sqlite3 es síncrono: no necesita callbacks ni promesas,
-// lo cual simplifica mucho el código en una API CRUD pequeña como esta.
-
+// Usa el módulo nativo de Node (node:sqlite): no requiere compilar nada.
 const path = require('path');
-const Database = require('better-sqlite3');
+const { DatabaseSync } = require('node:sqlite');
 
 const DB_PATH = path.join(__dirname, 'notes.db');
-const db = new Database(DB_PATH);
-
-// Mejora la seguridad ante concurrencia (varias peticiones simultáneas)
-db.pragma('journal_mode = WAL');
+const db = new DatabaseSync(DB_PATH);
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS notes (
